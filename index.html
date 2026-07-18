@@ -5,39 +5,46 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>かんべ ななつ拍子｜ゲームサンプル</title>
 <style>
-:root{--paper:#fff7e7;--ink:#38261f;--red:#e9483f;--blue:#3091d0;--gold:#f3b83f;--green:#245b3d}
+:root{--red:#ef3f32;--blue:#1597cc;--gold:#ffd34e;--cream:#fff7dc;--ink:#2b1712}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;min-height:100svh;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--ink);background:linear-gradient(#79b9dc 0 30%,#dff1e4 30% 100%);overflow-x:hidden}
-body:before{content:"";position:fixed;inset:18% 0 auto;height:170px;background:linear-gradient(135deg,transparent 0 38%,rgba(32,91,61,.28) 39% 48%,transparent 49%),linear-gradient(45deg,transparent 0 44%,rgba(32,91,61,.22) 45% 53%,transparent 54%);opacity:.7;pointer-events:none}
-.wrap{width:min(760px,100%);margin:auto;padding:18px 14px calc(22px + env(safe-area-inset-bottom))}
-.header{text-align:center;text-shadow:0 2px #fff}
-.header h1{margin:4px 0 0;font-size:clamp(28px,8vw,54px);letter-spacing:.08em;color:#9e2623}
-.header p{margin:4px 0 12px;font-weight:700}
-.card{background:rgba(255,247,231,.94);border:4px solid #8d4d2c;border-radius:22px;box-shadow:0 8px 0 rgba(72,39,23,.28);overflow:hidden}
-.status{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;background:#fff3cf;border-bottom:3px solid #c98d46;text-align:center;font-weight:800}
-.status strong{display:block;font-size:clamp(19px,5vw,30px);color:#9e2623}
-.game{position:relative;height:250px;background:linear-gradient(#293c43,#17252b);overflow:hidden}
-.lane{position:absolute;left:0;right:0;top:58px;height:118px;background:rgba(255,255,255,.08);border-top:3px solid rgba(255,255,255,.2);border-bottom:3px solid rgba(255,255,255,.2)}
-.hitline{position:absolute;left:84px;top:48px;width:8px;height:138px;background:var(--gold);box-shadow:0 0 14px var(--gold);border-radius:6px}
-.target{position:absolute;left:54px;top:79px;width:68px;height:68px;border:6px solid #f6d36e;border-radius:50%;background:rgba(255,255,255,.1)}
-.note{position:absolute;top:84px;width:58px;height:58px;border-radius:50%;border:5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+body{margin:0;min-height:100svh;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--ink);background:radial-gradient(circle at 15% 8%,#ffce45 0 2px,transparent 3px),radial-gradient(circle at 80% 12%,#4ad7ff 0 2px,transparent 3px),linear-gradient(#101753 0 38%,#6b1728 38% 52%,#f6d37b 52% 100%);background-size:90px 90px,120px 120px,auto;overflow-x:hidden}
+body:before{content:"🏮　🏮　🏮　🏮　🏮　🏮";position:fixed;top:0;left:0;right:0;text-align:center;font-size:clamp(24px,6vw,44px);letter-spacing:.12em;z-index:-1;filter:drop-shadow(0 4px 8px #000)}
+.wrap{width:min(820px,100%);margin:auto;padding:18px 12px calc(24px + env(safe-area-inset-bottom))}
+.header{text-align:center;color:#fff;text-shadow:0 4px 0 #5e130d,0 0 12px #ffcf38;margin-top:18px}
+.header h1{margin:8px 0 0;font-size:clamp(34px,9vw,62px);letter-spacing:.05em;color:#ff5b32;-webkit-text-stroke:2px #fff}
+.header p{margin:4px 0 14px;font-weight:900;font-size:clamp(15px,4vw,21px);color:#fff7a8}
+.card{background:var(--cream);border:5px solid #5d1b12;border-radius:24px;box-shadow:0 10px 0 rgba(0,0,0,.35);overflow:hidden}
+.status{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px;background:linear-gradient(90deg,#b51116,#ef4b24,#b51116);border-bottom:4px solid #ffcf45;text-align:center;font-weight:900;color:#fff}
+.status div{background:rgba(0,0,0,.22);border-radius:12px;padding:4px}
+.status strong{display:block;font-size:clamp(21px,6vw,34px);color:#ffe85d;text-shadow:0 3px #4d130b}
+.game{position:relative;height:270px;background:linear-gradient(rgba(8,12,38,.32),rgba(8,12,38,.7)),radial-gradient(circle at 15% 20%,#ffec63 0 2px,transparent 3px),radial-gradient(circle at 78% 18%,#59d5ff 0 2px,transparent 3px),linear-gradient(#182562,#32163e);overflow:hidden}
+.game:before{content:"🎆　　　　🎇　　　　🎆";position:absolute;top:0;left:0;right:0;text-align:center;font-size:54px;opacity:.8}
+.game:after{content:"🏮🏮🏮🏮🏮🏮🏮🏮🏮🏮";position:absolute;left:0;right:0;bottom:5px;text-align:center;font-size:27px;letter-spacing:7px;opacity:.9}
+.lane{position:absolute;left:0;right:0;top:78px;height:124px;background:linear-gradient(90deg,rgba(0,0,0,.83),rgba(40,40,40,.9));border-top:4px solid #f4c74d;border-bottom:4px solid #f4c74d;box-shadow:0 0 14px #f2a92f}
+.hitline{position:absolute;left:88px;top:68px;width:9px;height:144px;background:var(--gold);box-shadow:0 0 18px var(--gold);border-radius:8px;z-index:2}
+.target{position:absolute;left:55px;top:94px;width:72px;height:72px;border:7px solid #ffe66b;border-radius:50%;background:rgba(255,255,255,.12);box-shadow:0 0 18px #ffca34 inset;z-index:2}
+.note{position:absolute;top:99px;width:66px;height:66px;border-radius:50%;border:6px solid #fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:25px;font-weight:1000;color:#111;box-shadow:0 5px 0 rgba(0,0,0,.45);line-height:.8;z-index:3}
+.note:before{content:"•ᴗ•";font-size:20px;line-height:1;color:#161616}.note small{font-size:12px;color:#fff;text-shadow:0 2px #000;margin-top:4px;letter-spacing:.04em}
 .note.don{background:var(--red)}.note.ka{background:var(--blue)}
-.message{position:absolute;left:0;right:0;top:12px;text-align:center;font-size:25px;font-weight:900;color:#fff;text-shadow:0 3px #000;min-height:34px}
-.progress{height:10px;background:#d7cab0}.progress>div{height:100%;width:0;background:#e79d27}
-.controls{padding:14px}
-.start{width:100%;border:0;border-radius:16px;padding:15px;font-size:21px;font-weight:900;color:white;background:#9e2623;box-shadow:0 5px 0 #671714;margin-bottom:12px}
-.start:disabled{opacity:.72}.start:active{transform:translateY(3px);box-shadow:0 2px 0 #671714}
-.pads{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pad{height:105px;border-radius:50%;border:7px solid #fff;box-shadow:0 7px 0 rgba(0,0,0,.28);color:#fff;font-size:26px;font-weight:1000;touch-action:manipulation}
-.pad:active,.pad.active{transform:translateY(4px) scale(.98);box-shadow:0 3px 0 rgba(0,0,0,.28)}
-.pad.don{background:var(--red)}.pad.ka{background:var(--blue)}
-.help{font-size:14px;line-height:1.65;padding:0 4px 4px;text-align:center}
-.badge{display:inline-block;background:#fff3cf;border:2px solid #c98d46;border-radius:999px;padding:3px 10px;font-weight:800}
+.message{position:absolute;left:0;right:0;top:15px;text-align:center;font-size:28px;font-weight:1000;color:#fff;text-shadow:0 4px #000;min-height:38px;z-index:4}
+.progress{height:13px;background:#2b1720;border-top:2px solid #ffd45b}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#ff513c,#ffd33f)}
+.controls{padding:15px;background:repeating-linear-gradient(0deg,#fff7dc 0 22px,#f5e5b8 23px 24px)}
+.start{width:100%;border:3px solid #fff3a8;border-radius:17px;padding:15px;font-size:21px;font-weight:1000;color:white;background:linear-gradient(#d82e24,#96140f);box-shadow:0 6px 0 #5d130d;margin-bottom:14px}
+.start:disabled{opacity:.72}.start:active{transform:translateY(4px);box-shadow:0 2px 0 #5d130d}
+.pads{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pad{position:relative;height:132px;border-radius:24px;border:7px solid #fff;box-shadow:0 8px 0 rgba(0,0,0,.3),inset 0 -10px 0 rgba(0,0,0,.12);color:#fff;font-size:0;font-weight:1000;touch-action:manipulation;overflow:hidden}
+.pad:before{content:"•ᴗ•";display:block;font-size:35px;color:#111;line-height:1;margin-top:18px}.pad small{display:block;font-size:27px;color:#fff;text-shadow:0 3px #000;margin-top:6px}.pad:after{display:block;font-size:14px;margin-top:2px;font-weight:900}
+.pad.don{background:radial-gradient(circle at 50% 45%,#ff6658,#dc201a 68%)}.pad.ka{background:radial-gradient(circle at 50% 45%,#4ecaf0,#087eae 68%)}
+.pad.don:after{content:"あかのたいこ"}.pad.ka:after{content:"あおのたいこ"}
+.pad:active,.pad.active{transform:translateY(5px) scale(.98);box-shadow:0 3px 0 rgba(0,0,0,.3);filter:brightness(1.25)}
+.help{font-size:14px;line-height:1.65;padding:4px 4px 0;text-align:center;font-weight:700}
+.badge{display:inline-block;background:#ffdd55;border:3px solid #a72a19;border-radius:999px;padding:3px 12px;font-weight:1000;color:#7b180f}
+@media(max-width:480px){.wrap{padding-left:7px;padding-right:7px}.game{height:245px}.lane{top:72px}.note{top:93px}.target{top:88px}.hitline{top:62px}.pad{height:120px}.pad small{font-size:24px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="header"><h1>かんべ ななつ拍子</h1><p>夏祭り リズムゲーム・サンプル</p></header>
+  <header class="header"><h1>たいこの ななつびょうし</h1><p>🎆 なつまつり リズムゲーム 🎆</p></header>
   <main class="card">
     <section class="status">
       <div>スコア<strong id="score">0</strong></div>
@@ -53,10 +60,10 @@ body:before{content:"";position:fixed;inset:18% 0 auto;height:170px;background:l
     <section class="controls">
       <button class="start" id="start">▶ 曲を再生してスタート</button>
       <div class="pads">
-        <button class="pad don" id="don"><br><small>ひだり</small></button>
-        <button class="pad ka" id="ka"><br><small>みぎ</small></button>
+        <button class="pad don" id="don" aria-label="あかのたいこ ひだり"><small>ひだり</small></button>
+        <button class="pad ka" id="ka" aria-label="あおのたいこ みぎ"><small>みぎ</small></button>
       </div>
-      <p class="help"><span class="badge">遊び方</span><br>丸が黄色い判定線に重なった瞬間に、同じ色のボタンをタップしてください。<br>これは確認用の仮譜面です。音源はこのHTML内に入っています。</p>
+      <p class="help"><span class="badge">遊び方</span><br>あかのたいこは「ひだり」、あおのたいこは「みぎ」です。<br>おんぷが きいろいせんに かさなったら、同じいろのボタンをおしてください。</p>
     </section>
   </main>
 </div>
@@ -111,7 +118,7 @@ const progress = document.getElementById('progress');
 const startBtn = document.getElementById('start');
 let state=[], running=false, score=0, combo=0, maxCombo=0, raf=0;
 const travel=3.0, hitX=88;
-function reset(){cancelAnimationFrame(raf);notesLayer.innerHTML='';score=combo=maxCombo=0;updateScore();state=chart.map((n,i)=>{const el=document.createElement('div');el.className='note '+n.type;el.textContent=n.type==='don'?'ドン':'カッ';notesLayer.appendChild(el);return {...n,el,hit:false,miss:false};});progress.style.width='0%';message.textContent='準備…'}
+function reset(){cancelAnimationFrame(raf);notesLayer.innerHTML='';score=combo=maxCombo=0;updateScore();state=chart.map((n,i)=>{const el=document.createElement('div');el.className='note '+n.type;el.innerHTML=`<small>${n.type==='don'?'ひだり':'みぎ'}</small>`;notesLayer.appendChild(el);return {...n,el,hit:false,miss:false};});progress.style.width='0%';message.textContent='準備…'}
 function updateScore(){scoreEl.textContent=score;comboEl.textContent=combo;maxComboEl.textContent=maxCombo}
 function judge(type){if(!running||!audio)return;const now=audio.currentTime;let best=null,dist=999;for(const n of state){if(n.hit||n.miss||n.type!==type)continue;const d=Math.abs(n.time-now);if(d<dist){dist=d;best=n}}if(!best||dist>.24){combo=0;message.textContent='不可';updateScore();flash(type);return}best.hit=true;best.el.remove();let add;if(dist<=.07){message.textContent='良';add=1000}else if(dist<=.14){message.textContent='可';add=500}else{message.textContent='惜しい';add=200}combo++;maxCombo=Math.max(maxCombo,combo);score+=add+combo*10;updateScore();flash(type)}
 function flash(type){const b=document.getElementById(type);b.classList.add('active');setTimeout(()=>b.classList.remove('active'),90)}
