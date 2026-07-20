@@ -56,7 +56,7 @@ font-variant-numeric:tabular-nums;text-shadow:0 2px #000}
       <div>最高<strong id="maxCombo">0</strong></div>
     </section>
     <section class="game" id="game">
-      <div class="elapsed-time">経過時間 <span id="elapsed">00:00.00</span></div>
+      <div class="elapsed-time">経過時間 <span id="elapsed">00:0.00</span></div>
       <div class="message" id="message">スタートを押してください</div>
       <div class="lane"></div><div class="hitline"></div><div class="target"></div>
       <div id="notes"></div>
@@ -131,10 +131,15 @@ const travel=3.0, hitX=88;
 function reset(){cancelAnimationFrame(raf);notesLayer.innerHTML='';score=combo=maxCombo=0;updateScore();state=chart.map((n,i)=>{const el=document.createElement('div');el.className='note '+n.type;el.innerHTML=`<small>${n.type==='don'?'ひだり':'みぎ'}</small>`;notesLayer.appendChild(el);return {...n,el,hit:false,miss:false};});progress.style.width='0%';elapsedEl.textContent='00:00.0';message.textContent='準備…'}
 function updateScore(){scoreEl.textContent=score;comboEl.textContent=combo;maxComboEl.textContent=maxCombo}
 function formatElapsed(seconds){
-  const minutes=Math.floor(seconds/60);
-  const secs=Math.floor(seconds%60);
-  const tenths=Math.floor((seconds-Math.floor(seconds))*10);
-  return String(minutes).padStart(2,'0')+':'+String(secs).padStart(2,'0')+'.'+tenths;
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  const hundredths = Math.floor((seconds - Math.floor(seconds)) * 100);
+
+  return (
+    String(minutes).padStart(2,"0") + ":" +
+    secs + "." +
+    String(hundredths).padStart(2,"0")
+  );
 }
 function judge(type){if(!running||!audio)return;const now=audio.currentTime;let best=null,dist=999;for(const n of state){if(n.hit||n.miss||n.type!==type)continue;const d=Math.abs(n.time-now);if(d<dist){dist=d;best=n}}if(!best||dist>.24){combo=0;message.textContent='不可';updateScore();flash(type);return}best.hit=true;best.el.remove();let add;if(dist<=.07){message.textContent='良';add=1000}else if(dist<=.14){message.textContent='可';add=500}else{message.textContent='惜しい';add=200}combo++;maxCombo=Math.max(maxCombo,combo);score+=add+combo*10;updateScore();flash(type)}
 function flash(type){const b=document.getElementById(type);b.classList.add('active');setTimeout(()=>b.classList.remove('active'),90)}
