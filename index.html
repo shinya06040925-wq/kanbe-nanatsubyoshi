@@ -128,7 +128,25 @@ const progress = document.getElementById('progress');
 const startBtn = document.getElementById('start');
 let state=[], running=false, score=0, combo=0, maxCombo=0, raf=0;
 const travel=3.0, hitX=88;
-function reset(){cancelAnimationFrame(raf);notesLayer.innerHTML='';score=combo=maxCombo=0;updateScore();state=chart.map((n,i)=>{const el=document.createElement('div');el.className='note '+n.type;el.innerHTML=`<small>${n.type==='don'?'ひだり':'みぎ'}</small>`;notesLayer.appendChild(el);return {...n,el,hit:false,miss:false};});progress.style.width='0%';elapsedEl.textContent='00:00.0';message.textContent='準備…'}
+function reset(){
+  cancelAnimationFrame(raf);
+  notesLayer.innerHTML='';
+  notesLayer.style.display='none';
+  score=combo=maxCombo=0;
+  updateScore();
+
+  state=chart.map((n,i)=>{
+    const el=document.createElement('div');
+    el.className='note '+n.type;
+    el.innerHTML=`<small>${n.type==='don'?'ひだり':'みぎ'}</small>`;
+    notesLayer.appendChild(el);
+    return {...n,el,hit:false,miss:false};
+  });
+
+  progress.style.width='0%';
+  elapsedEl.textContent='00:00.0';
+  message.textContent='準備…';
+}
 function updateScore(){scoreEl.textContent=score;comboEl.textContent=combo;maxComboEl.textContent=maxCombo}
 function formatElapsed(seconds){
   const minutes=Math.floor(seconds/60);
@@ -157,6 +175,7 @@ async function start(e){
     const p=player.play();
     if(p) await p;
     running=true;
+    notesLayer.style.display='block';
     message.textContent='スタート！';
     startBtn.textContent='演奏中…';
     raf=requestAnimationFrame(frame);
@@ -193,7 +212,7 @@ pauseBtn.addEventListener('pointerup', async (e)=>{
     try{
       await audio.play();
       running=true;
-      pauseBtn.textContent='⏸ 一時停止';
+      pauseBtn.textContent='⏸ ';
       message.textContent='再開！';
       cancelAnimationFrame(raf);
       raf=requestAnimationFrame(frame);
