@@ -18,7 +18,7 @@ body:before{content:"🏮　🏮　🏮　🏮　🏮　🏮";position:fixed;top
 .status div{background:rgba(0,0,0,.22);border-radius:12px;padding:4px}
 .status strong{display:block;font-size:clamp(21px,6vw,34px);color:#ffe85d;text-shadow:0 3px #4d130b}
 .game{position:relative;height:270px;background:linear-gradient(rgba(8,12,38,.32),rgba(8,12,38,.7)),radial-gradient(circle at 15% 20%,#ffec63 0 2px,transparent 3px),radial-gradient(circle at 78% 18%,#59d5ff 0 2px,transparent 3px),linear-gradient(#182562,#32163e);overflow:hidden}
-.game:before{content:"🎆　　　　　　　　　　";position:absolute;top:0;left:0;right:0;text-align:center;font-size:54px;opacity:.8}
+.game:before{content:"🎆　　　　　　　　　　";position:absolute;top:0;left:0;right:0;text-align:center;font-size:30px;opacity:.8}
 .game:after{content:"🏮🏮🏮🏮🏮🏮🏮🏮🏮";position:absolute;left:0;right:0;bottom:5px;text-align:center;font-size:27px;letter-spacing:7px;opacity:.9}
 .lane{position:absolute;left:0;right:0;top:78px;height:124px;background:linear-gradient(90deg,rgba(0,0,0,.83),rgba(40,40,40,.9));border-top:4px solid #f4c74d;border-bottom:4px solid #f4c74d;box-shadow:0 0 14px #f2a92f}
 .hitline{position:absolute;left:88px;top:68px;width:9px;height:144px;background:var(--gold);box-shadow:0 0 18px var(--gold);border-radius:8px;z-index:2}
@@ -30,7 +30,7 @@ body:before{content:"🏮　🏮　🏮　🏮　🏮　🏮";position:fixed;top
 background:rgba(0,0,0,.62);border:2px solid #ffe85d;border-radius:10px;
 padding:5px 9px;color:#fff;font-size:15px;font-weight:900;
 font-variant-numeric:tabular-nums;text-shadow:0 2px #000}
-.message{position:absolute;left:0;right:0;top:15px;text-align:center;font-size:28px;font-weight:1000;color:#fff;text-shadow:0 4px #000;min-height:38px;z-index:4}
+.message{position:absolute;left:0;right:0;top:15px;text-align:center;font-size:18px;font-weight:1000;color:#fff;text-shadow:0 3px #000;min-height:24px;z-index:4}
 .progress{height:13px;background:#2b1720;border-top:2px solid #ffd45b}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#ff513c,#ffd33f)}
 .controls{padding:15px;background:repeating-linear-gradient(0deg,#fff7dc 0 22px,#f5e5b8 23px 24px)}
 .start{width:100%;border:3px solid #fff3a8;border-radius:17px;padding:15px;font-size:21px;font-weight:1000;color:white;background:linear-gradient(#d82e24,#96140f);box-shadow:0 6px 0 #5d130d;margin-bottom:14px}
@@ -56,7 +56,7 @@ font-variant-numeric:tabular-nums;text-shadow:0 2px #000}
       <div>最高<strong id="maxCombo">0</strong></div>
     </section>
     <section class="game" id="game">
-      <div class="elapsed-time">経過時間 <span id="elapsed">00:0.00</span></div>
+      <div class="elapsed-time">経過時間 <span id="elapsed">00:00.00</span></div>
       <div class="message" id="message">スタートを押してください</div>
       <div class="lane"></div><div class="hitline"></div><div class="target"></div>
       <div id="notes"></div>
@@ -131,15 +131,10 @@ const travel=3.0, hitX=88;
 function reset(){cancelAnimationFrame(raf);notesLayer.innerHTML='';score=combo=maxCombo=0;updateScore();state=chart.map((n,i)=>{const el=document.createElement('div');el.className='note '+n.type;el.innerHTML=`<small>${n.type==='don'?'ひだり':'みぎ'}</small>`;notesLayer.appendChild(el);return {...n,el,hit:false,miss:false};});progress.style.width='0%';elapsedEl.textContent='00:00.0';message.textContent='準備…'}
 function updateScore(){scoreEl.textContent=score;comboEl.textContent=combo;maxComboEl.textContent=maxCombo}
 function formatElapsed(seconds){
-  const minutes = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  const hundredths = Math.floor((seconds - Math.floor(seconds)) * 100);
-
-  return (
-    String(minutes).padStart(2,"0") + ":" +
-    secs + "." +
-    String(hundredths).padStart(2,"0")
-  );
+  const minutes=Math.floor(seconds/60);
+  const secs=Math.floor(seconds%60);
+  const tenths=Math.floor((seconds-Math.floor(seconds))*10);
+  return String(minutes).padStart(2,'0')+':'+String(secs).padStart(2,'0')+'.'+tenths;
 }
 function judge(type){if(!running||!audio)return;const now=audio.currentTime;let best=null,dist=999;for(const n of state){if(n.hit||n.miss||n.type!==type)continue;const d=Math.abs(n.time-now);if(d<dist){dist=d;best=n}}if(!best||dist>.24){combo=0;message.textContent='不可';updateScore();flash(type);return}best.hit=true;best.el.remove();let add;if(dist<=.07){message.textContent='良';add=1000}else if(dist<=.14){message.textContent='可';add=500}else{message.textContent='惜しい';add=200}combo++;maxCombo=Math.max(maxCombo,combo);score+=add+combo*10;updateScore();flash(type)}
 function flash(type){const b=document.getElementById(type);b.classList.add('active');setTimeout(()=>b.classList.remove('active'),90)}
