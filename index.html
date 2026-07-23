@@ -27,10 +27,6 @@ body:before{content:"みやざき しんや ぷれぜんつ";color:#fff;position
 .note{position:absolute;top:99px;width:66px;height:66px;border-radius:50%;border:6px solid #fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:25px;font-weight:1000;color:#111;box-shadow:0 5px 0 rgba(0,0,0,.45);line-height:.8;z-index:3}
 .note:before{content:"•ᴗ•";font-size:20px;line-height:1;color:#161616}.note small{font-size:12px;color:#fff;text-shadow:0 2px #000;margin-top:4px;letter-spacing:.04em}
 .note.don{background:var(--red)}.note.ka{background:var(--blue)}
-.elapsed-time{position:absolute;right:12px;top:12px;z-index:5;
-background:rgba(0,0,0,.62);border:2px solid #ffe85d;border-radius:10px;
-padding:5px 9px;color:#fff;font-size:15px;font-weight:900;
-font-variant-numeric:tabular-nums;text-shadow:0 2px #000}
 .message{position:absolute;left:0;right:0;top:15px;text-align:center;font-size:28px;font-weight:1000;color:#fff;text-shadow:0 4px #000;min-height:38px;z-index:4}
 .progress{height:13px;background:#2b1720;border-top:2px solid #ffd45b}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#ff513c,#ffd33f)}
 .controls{padding:8px;background:repeating-linear-gradient(0deg,#fff7dc 0 22px,#f5e5b8 23px 24px)}
@@ -67,7 +63,7 @@ font-variant-numeric:tabular-nums;text-shadow:0 2px #000}
 </head>
 <body>
 <div class="wrap">
-  <header class="header"><h1>ときわのたつじん</h1><p>🎆 かんべ・ななつびょうし 🎆</p></header>
+  <header class="header"><h1>ときわのたつじん</h1><p>🎆 かんべ　ななつびょうし 🎆</p></header>
   <main class="card">
     <section class="status">
       <div>スコア<strong id="score">0</strong></div>
@@ -76,7 +72,6 @@ font-variant-numeric:tabular-nums;text-shadow:0 2px #000}
     </section>
     <p class="play-counter">🌏 みんなの総プレイ数 <strong id="totalPlays">--</strong> 回</p>
     <section class="game" id="game">
-      <div class="elapsed-time">経過時間 <span id="elapsed">00:00.00</span></div>
       <div class="message" id="message">スタートを押してください</div>
       <div class="lane"></div><div class="hitline"></div><div class="target"></div>
       <div id="notes" style="display:none"></div>
@@ -233,7 +228,6 @@ const message = document.getElementById('message');
 const scoreEl = document.getElementById('score');
 const comboEl = document.getElementById('combo');
 const maxComboEl = document.getElementById('maxCombo');
-const elapsedEl = document.getElementById('elapsed');
 const progress = document.getElementById('progress');
 const startBtn = document.getElementById('start');
 const pauseBtn = document.getElementById('pause');
@@ -263,7 +257,6 @@ function reset(){
   });
 
   progress.style.width='0%';
-  elapsedEl.textContent='00:00.0';
   message.textContent='準備…';
 }
 
@@ -271,13 +264,6 @@ function updateScore(){
   scoreEl.textContent=score;
   comboEl.textContent=combo;
   maxComboEl.textContent=maxCombo;
-}
-
-function formatElapsed(seconds){
-  const minutes=Math.floor(seconds/60);
-  const secs=Math.floor(seconds%60);
-  const tenths=Math.floor((seconds-Math.floor(seconds))*10);
-  return String(minutes).padStart(2,'0')+':'+String(secs).padStart(2,'0')+'.'+tenths;
 }
 
 function judge(type){
@@ -325,9 +311,8 @@ function flash(type){
 function frame(){
   if(!audio || !running) return;
 
-  // requestAnimationFrameの経過時間ではなく、音楽を親時計にします。
+  // 音楽の再生位置を親時計にします。
   const now=audio.currentTime;
-  elapsedEl.textContent=formatElapsed(now);
   const width=game.clientWidth;
 
   for(const n of state){
