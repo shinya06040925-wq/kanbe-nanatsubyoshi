@@ -43,6 +43,24 @@ font-variant-numeric:tabular-nums;text-shadow:0 2px #000}
 .pad:active,.pad.active{transform:translateY(5px) scale(.98);box-shadow:0 3px 0 rgba(0,0,0,.3);filter:brightness(1.25)}
 .help{font-size:14px;line-height:1.65;padding:4px 4px 0;text-align:center;font-weight:700}
 .badge{display:inline-block;background:#ffdd55;border:3px solid #a72a19;border-radius:999px;padding:3px 12px;font-weight:1000;color:#7b180f}
+.play-counter{
+  margin:0;
+  padding:10px 12px;
+  text-align:center;
+  background:linear-gradient(90deg,#fff0a8,#ffd34e,#fff0a8);
+  border-bottom:4px solid #a72a19;
+  color:#7b180f;
+  font-size:16px;
+  font-weight:1000;
+}
+.play-counter strong{
+  margin:0 5px;
+  font-size:clamp(24px,6vw,36px);
+  color:#c51d16;
+  text-shadow:0 2px #fff;
+  font-variant-numeric:tabular-nums;
+}
+
 @media(max-width:480px){.wrap{padding-left:7px;padding-right:7px}.game{height:245px}.lane{top:72px}.note{top:93px}.target{top:88px}.hitline{top:62px}.pad{height:120px}.pad small{font-size:24px}}
 </style>
 </head>
@@ -55,6 +73,7 @@ font-variant-numeric:tabular-nums;text-shadow:0 2px #000}
       <div>コンボ<strong id="combo">0</strong></div>
       <div>最高<strong id="maxCombo">0</strong></div>
     </section>
+    <p class="play-counter">🌏 みんなの総プレイ数 <strong id="totalPlays">--</strong> 回</p>
     <section class="game" id="game">
       <div class="elapsed-time">経過時間 <span id="elapsed">00:00.00</span></div>
       <div class="message" id="message">スタートを押してください</div>
@@ -362,6 +381,10 @@ async function start(e){
 
     // 音楽の再生開始をゲーム開始時刻にします。
     await player.play();
+
+    // 音楽が正常に始まったときだけ、全ユーザー共通のプレイ数を1回増やします。
+    window.dispatchEvent(new Event('taiko-game-started'));
+
     running=true;
     notesLayer.style.display='block';
     message.textContent='スタート！';
@@ -453,6 +476,72 @@ stopBtn.addEventListener('pointerup',e=>{
 // ページ読み込み中に太鼓音を先読みします。
 prepareHitSounds();
 reset();
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  onSnapshot,
+  runTransaction
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAKKF71k6YS5uqfZ5RiXZSBJWbES4rgtHQ",
+  authDomain: "taiko-counter.firebaseapp.com",
+  projectId: "taiko-counter",
+  storageBucket: "taiko-counter.firebasestorage.app",
+  messagingSenderId: "375171631558",
+  appId: "1:375171631558:web:fab6b9dba6af1d9928cac7",
+  measurementId: "G-733GS4G7F8"
+};
+
+const totalPlaysEl = document.getElementById("totalPlays");
+
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const counterRef = doc(db, "counters", "totalPlays");
+
+  // 他の人が遊んだ場合も、画面の数字を自動更新します。
+  onSnapshot(counterRef, (snapshot) => {
+    const value = snapshot.exists() ? Number(snapshot.data().count || 0) : 0;
+    totalPlaysEl.textContent = value.toLocaleString("ja-JP");
+  }, (error) => {
+    console.error("プレイ数の読み込みエラー:", error);
+    totalPlaysEl.textContent = "接続エラー";
+  });
+
+  let counting = false;
+
+  window.addEventListener("taiko-game-started", async () => {
+    if (counting) return;
+    counting = true;
+
+    try {
+      await runTransaction(db, async (transaction) => {
+        const snapshot = await transaction.get(counterRef);
+        const current = snapshot.exists()
+          ? Number(snapshot.data().count || 0)
+          : 0;
+
+        transaction.set(counterRef, {
+          count: current + 1,
+          updatedAt: new Date().toISOString()
+        });
+      });
+    } catch (error) {
+      console.error("プレイ数の更新エラー:", error);
+      totalPlaysEl.textContent = "更新エラー";
+    } finally {
+      counting = false;
+    }
+  });
+} catch (error) {
+  console.error("Firebaseの初期化エラー:", error);
+  totalPlaysEl.textContent = "接続エラー";
+}
 </script>
 </body>
 </html>
